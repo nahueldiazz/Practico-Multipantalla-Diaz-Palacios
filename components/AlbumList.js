@@ -12,7 +12,7 @@ const AlbumList = ({navigation}) => {
       'https://api.flickr.com/services/rest/?method=flickr.photosets.getList&api_key=6e8a597cb502b7b95dbd46a46e25db8d&user_id=137290658%40N08&format=json&nojsoncallback=1',
     )
       setState({photoset: response.data.photosets.photoset});
-   
+   console.log(response);
   }
   
   useEffect(() => {
@@ -29,6 +29,13 @@ const AlbumList = ({navigation}) => {
     
   }
 
+  const style = {
+    textAlign: "center",
+    fontSize: 38,
+    marginTop: 230,
+    marginBottom: 50
+  }
+
   return (
     state.photoset ?
       <View>
@@ -38,7 +45,7 @@ const AlbumList = ({navigation}) => {
           keyExtractor={album => album.id}
         />
       </View> :
-      <Text>Loading...</Text>
+      <Text style={style}>Loading...</Text>
   )
 }
 
