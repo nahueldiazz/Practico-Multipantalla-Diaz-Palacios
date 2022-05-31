@@ -13,11 +13,15 @@ const styles = {
   containerStyle: {
     borderBottomWidth: 1,
     padding: 5,
-    backgroundColor: '#fff',
     justifyContent: 'flex-start',
     flexDirection: 'row',
     borderColor: '#ddd',
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: '#F8EFE1',
+    shadowColor: '#666666',
+    shadowOffset: {width: 3, height: 3},
+    shadowOpacity: 0.2,
+    elevation: 1,
   }
 };
 

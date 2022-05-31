@@ -1,48 +1,58 @@
-import React, {Component} from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PhotoDetail from './PhotoDetail';
+import  {  FlatList,Text, View} from 'react-native';
 
-class PhotoList extends Component {
-  state = {photos: null};
+function PhotoList(props){
 
-  componentWillMount() {
-    axios
+  const [state, setState] = useState({photos: null})
+  const { loadingStyle, flatListStyle } = styles;
+  const getPhotos = async () => {
+      let response
+      try {
+          response = await axios
       .get(
-        `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e8a597cb502b7b95dbd46a46e25db8d&photoset_id=${this.props.route.params.albumId}&user_id=137290658%40N08&format=json&nojsoncallback=1`,
+        `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=6e8a597cb502b7b95dbd46a46e25db8d&photoset_id=${props.route.params.albumId}&user_id=137290658%40N08&format=json&nojsoncallback=1`,
       )
-      .then((response) =>
-        this.setState({photos: response.data.photoset.photo}),
-      );
+      setState({photos: response.data.photoset.photo})
+      console.log(response.data.photoset.photo)
+      }
+      catch (error){
+          console.log(error)
+      }
   }
+  useEffect(() => {
+      getPhotos()
+  },[])
 
-  renderAlbums() {
-    return this.state.photos.map((photo) => (
-      <PhotoDetail
-        key={photo.title}
-        title={photo.title}
-        imageUrl={`https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}.jpg`}
-      />
-    ));
-  }
-
-  render() {
-    console.log(this.state);
-
-    if (!this.state.photos) {
-      return (
-        <View style={{flex: 1}}>
+  return (
+      state.photos 
+      ? <FlatList data={state.photos} style={flatListStyle} renderItem={({item}) => 
+          <PhotoDetail
+          key={item.title}
+          title={item.title}
+          imageUrl={`https://farm${item.farm}.staticflickr.com/${item.server}/${item.id}_${item.secret}.jpg`}
+          />
+          }>
+      </FlatList>
+      :  
+          <View style={loadingStyle}>
           <Text>Loading...</Text>
-        </View>
-      );
-    }
+          </View>
+  )
+};
+const styles = {
+    loadingStyle: {
+        alignSelf: "center",
+        color: '#E2E2E2',
+        fontSize: 38,
+        marginTop: 230,
+        marginBottom: 50
+      },
+      flatListStyle: {
+          backgroundColor: '#E2E2E2'
+      }
+};
 
-    return (
-      <View style={{flex: 1}}>
-        <ScrollView>{this.renderAlbums()}</ScrollView>
-      </View>
-    );
-  }
-}
 
-export default PhotoList;
+export default PhotoList

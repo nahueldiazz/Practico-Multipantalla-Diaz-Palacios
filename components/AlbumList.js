@@ -43,6 +43,7 @@ const AlbumList = ({navigation}) => {
           data={state.photoset}
           renderItem={renderAlbums}
           keyExtractor={album => album.id}
+          style = {{backgroundColor: '#E2E2E2'}}
         />
       </View> :
       <Text style={style}>Loading...</Text>
