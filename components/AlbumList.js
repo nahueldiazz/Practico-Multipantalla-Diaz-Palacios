@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, Text, View, StatusBar} from 'react-native';
+import { FlatList, Text, View, ActivityIndicator, ImageBackground} from 'react-native';
 import axios from 'axios';
 import AlbumDetail from './AlbumDetail';
 
@@ -38,16 +38,40 @@ const AlbumList = ({navigation}) => {
 
   return (
     state.photoset ?
-      <View>
+      <View style={[styles.container ]}>
+        <ImageBackground source={require("../assets/background.png")}  resizeMode="cover">
         <FlatList
           data={state.photoset}
           renderItem={renderAlbums}
           keyExtractor={album => album.id}
-          style = {{backgroundColor: '#E2E2E2'}}
+
         />
+        </ImageBackground>
       </View> :
-      <Text style={style}>Loading...</Text>
+          <View style={[styles.containerLoader, styles.horizontal]}>
+          <ActivityIndicator
+            animating={true}
+            hidesWhenStopped={true}
+            size={40}
+            color={"#000000"}
+          ></ActivityIndicator>
+        </View>
   )
+};
+
+const styles = {
+  container: {
+    flex: 1,
+  },
+  containerLoader: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+  }
 }
 
 export default AlbumList;
